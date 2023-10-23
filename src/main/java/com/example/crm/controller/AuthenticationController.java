@@ -17,7 +17,7 @@ public class AuthenticationController {
     @GetMapping("/me")
     ResponseEntity<UserDto> getCurrentUser() {
         var currentUser = authenticationService.getCurrentUser();
-        var currentUserDto = new UserDto(currentUser.getId(), currentUser.getEmail(), currentUser.getFirstName(), currentUser.getLastName());
+        var currentUserDto = new UserDto(currentUser);
         return ResponseEntity.ok(currentUserDto);
     }
 }
