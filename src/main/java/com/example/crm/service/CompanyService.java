@@ -5,6 +5,7 @@ import com.example.crm.dto.CreateCompanyDto;
 import com.example.crm.dto.UpdateCompanyDto;
 import com.example.crm.entity.Company;
 import com.example.crm.exception.ResourceNotFoundException;
+import com.example.crm.repository.CompanyContactRepository;
 import com.example.crm.repository.CompanyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CompanyService {
     private final CompanyRepository companyRepository;
+    private final CompanyContactRepository companyContactRepository;
 
     public void create(CreateCompanyDto dto) {
         var company = new Company();
@@ -43,8 +45,10 @@ public class CompanyService {
         company.setSize(dto.size());
     }
 
+    @Transactional
     public void delete(Long companyId) {
         var company = companyRepository.findById(companyId).orElseThrow(ResourceNotFoundException::new);
+        companyContactRepository.deleteAllByCompanyId(company.getId());
         companyRepository.delete(company);
     }
 }
